@@ -14,71 +14,44 @@ export class AppComponent {
 
   @ViewChild('xy') xy;
 
-  func: string = 'sin(x)';
-  node: math.MathNode;
-  compiled: math.EvalFunction;
-  messages: string;
+  func: math.EvalFunction;
   x: number;
-  y: number;
+  y: string;
+  messages: string;
   chart: chart.Chart;
 
-  ngOnInit() {
-    this.node = math.parse(this.func);
-    this.compiled = this.node.compile();
-    this.messages = "OK"
+  ngOnInit(): void {
   }
 
-  onFunc(value: string) {
-    console.log(value);
-    this.func = value;
-    try {
-      this.node = math.parse(value);
-      this.compiled = this.node.compile();
-      this.messages = "OK"
-      this.onCalculate();
-    } catch (error) {
-      let e: Error = error;
-      this.node = null;
-      this.compiled = null;
-      this.messages = e.message;
-    }
+  onCompile(func: math.EvalFunction): void {
+    this.func = func;
+    this.onCalculate();
   }
 
-  onCalculate() {
-    if (this.x != null && this.compiled) {
+  onCalculate(): void {
+    if (this.x != null && this.func) {
       let scope = {
         x: this.x
       }
       try {
-        this.y = this.compiled.evaluate(scope)
+        let y = this.func.evaluate(scope);
+        this.y = math.complex(y).format(4);
       } catch (error) {
         let e: Error = error;
-        this.node = null;
-        this.compiled = null;
+        this.func = null;
         this.messages = e.message;
       }
     }
   }
 
-  onX(x?: number) {
+  onX(x?: number): void {
     if (x != null && this.x !== x) {
       this.x = x;
       this.onCalculate();
     }
   }
 
-  onDifferentiate() {
-    if (this.node) {
-      var derivative = math.derivative(this.node, 'x');
-      derivative = math.simplify(derivative);
-      this.func = derivative.toString();
-      this.node = derivative;
-      this.compiled = this.node.compile();
-      this.onCalculate();
-    }
-  }
-
-  onDraw() {
+  onDraw(): void {
     let canvas = this.xy.nativeElement;
     let context: CanvasRenderingContext2D = canvas.getContext("2d");
 
@@ -89,19 +62,29 @@ export class AppComponent {
     const it = utils.makeRangeIterator(xMin, xMax, dx);
 
     let xs = Array.from(it);
-    let f = (x: number) => this.compiled.evaluate({ x: x });
-    let data = xs.map(x => ({ x: x, y: f(x) }));
+    let f = (x: number) => this.func.evaluate({ x: x });
+    let data = xs.map(x => ({ x: x, y: math.complex(f(x)) }));
+    let real = data.map(p => ({ x: p.x, y: p.y.re }));
+    let img = data.map(p => ({ x: p.x, y: p.y.im }));
+
 
     if (this.chart) {
       this.chart.destroy();
     }
 
     this.chart = new chart.Chart(context, {
-      type: 'scatter',
+      type: 'line',
       data: {
         datasets: [{
-          label: this.func,
-          data: data
+          label: "real",
+          data: real,
+          yAxisID: 'y',
+          borderColor: "rgba(255, 0, 0, 255)"
+        }, {
+          label: "imaginary",
+          data: img,
+          yAxisID: 'y2',
+          borderColor: "rgba(0, 0, 255, 255)"
         }]
       },
       options: {
@@ -111,6 +94,15 @@ export class AppComponent {
           xAxes: [{
             type: 'linear',
             position: 'bottom'
+          }],
+          yAxes: [{
+            id: 'y',
+            type: 'linear',
+            position: 'left'
+          }, {
+            id: 'y2',
+            type: 'linear',
+            position: 'right'
           }]
         }
       }

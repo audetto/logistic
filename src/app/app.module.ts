@@ -12,10 +12,12 @@ import { MatSidenavModule } from '@angular/material/sidenav'
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatCardModule } from '@angular/material/card';
 import { MatGridListModule } from '@angular/material/grid-list';
+import { FunctionComponent } from './function/function.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    FunctionComponent
   ],
   imports: [
     BrowserModule,
