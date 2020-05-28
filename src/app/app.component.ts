@@ -16,7 +16,6 @@ export class AppComponent {
 
   func: math.EvalFunction;
   x: number = 0.2;
-  messages: string;
   chart: chart.Chart;
   xMin: number = 0;
   xMax: number = 2;
@@ -42,7 +41,7 @@ export class AppComponent {
 
   onDraw(): void {
     let canvas = this.xy.nativeElement;
-    let context: CanvasRenderingContext2D = canvas.getContext("2d");
+    let context: CanvasRenderingContext2D = canvas.getContext('2d');
 
     let f = this.getF();
 
@@ -53,7 +52,7 @@ export class AppComponent {
     let lower = iterates.reduce(minReducer, this.xMin);
     let upper = iterates.reduce(maxReducer, this.xMax);
 
-    let dx = 0.1;
+    let dx = (upper - lower) / 100;
     const it = utils.makeRangeIterator(lower, upper + dx, dx);
 
     let xs = Array.from(it);
@@ -68,21 +67,23 @@ export class AppComponent {
       type: 'line',
       data: {
         datasets: [{
-          label: "function",
+          label: 'function',
           data: data,
           yAxisID: 'y',
-          borderColor: "rgba(255, 0, 0, 255)"
+          borderColor: 'rgba(255, 0, 0, 255)',
+          pointRadius: 0
         }, {
-          label: "identity",
+          label: 'identity',
           data: identity,
           yAxisID: 'y',
-          borderColor: "rgba(0, 255, 0, 255)"
+          borderColor: 'rgba(0, 255, 0, 255)',
+          pointRadius: 0
         }, {
-          label: "iterates",
+          label: 'iterates',
           data: iterates,
           cubicInterpolationMode: 'monotone',
           yAxisID: 'y',
-          borderColor: "rgba(0, 0, 255, 255)"
+          borderColor: 'rgba(0, 0, 255, 255)'
         }]
       },
       options: {
