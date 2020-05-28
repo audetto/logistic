@@ -15,39 +15,28 @@ export class AppComponent {
   @ViewChild('xy') xy;
 
   func: math.EvalFunction;
-  x: number;
-  y: string;
+  x: number = 0.2;
   messages: string;
   chart: chart.Chart;
+  xMin: number = 0;
+  xMax: number = 2;
 
   ngOnInit(): void {
   }
 
-  onCompile(func: math.EvalFunction): void {
-    this.func = func;
-    this.onCalculate();
+  getF(): (x: number) => number {
+    let f = (x: number) => this.func.evaluate({ x: x });
+    return f;
   }
 
-  onCalculate(): void {
-    if (this.x != null && this.func) {
-      let scope = {
-        x: this.x
-      }
-      try {
-        let y = this.func.evaluate(scope);
-        this.y = math.complex(y).format(4);
-      } catch (error) {
-        let e: Error = error;
-        this.func = null;
-        this.messages = e.message;
-      }
-    }
+  onCompile(func: math.EvalFunction): void {
+    this.func = func;
   }
 
   onX(x?: number): void {
     if (x != null && this.x !== x) {
       this.x = x;
-      this.onCalculate();
+      this.onDraw();
     }
   }
 
@@ -55,18 +44,21 @@ export class AppComponent {
     let canvas = this.xy.nativeElement;
     let context: CanvasRenderingContext2D = canvas.getContext("2d");
 
-    let xMin = -10;
-    let xMax = 10;
-    let dx = 0.1;
+    let f = this.getF();
 
-    const it = utils.makeRangeIterator(xMin, xMax, dx);
+    let iterates = utils.iterateFunction(f, this.x, 100);
+
+    const minReducer = (accumulator: number, currentValue) => Math.min(accumulator, currentValue.x);
+    const maxReducer = (accumulator: number, currentValue) => Math.max(accumulator, currentValue.x);
+    let lower = iterates.reduce(minReducer, this.xMin);
+    let upper = iterates.reduce(maxReducer, this.xMax);
+
+    let dx = 0.1;
+    const it = utils.makeRangeIterator(lower, upper + dx, dx);
 
     let xs = Array.from(it);
-    let f = (x: number) => this.func.evaluate({ x: x });
-    let data = xs.map(x => ({ x: x, y: math.complex(f(x)) }));
-    let real = data.map(p => ({ x: p.x, y: p.y.re }));
-    let img = data.map(p => ({ x: p.x, y: p.y.im }));
-
+    let data = xs.map(x => ({ x: x, y: f(x) }));
+    let identity = xs.map(x => ({ x: x, y: x }));
 
     if (this.chart) {
       this.chart.destroy();
@@ -76,18 +68,25 @@ export class AppComponent {
       type: 'line',
       data: {
         datasets: [{
-          label: "real",
-          data: real,
+          label: "function",
+          data: data,
           yAxisID: 'y',
           borderColor: "rgba(255, 0, 0, 255)"
         }, {
-          label: "imaginary",
-          data: img,
-          yAxisID: 'y2',
+          label: "identity",
+          data: identity,
+          yAxisID: 'y',
+          borderColor: "rgba(0, 255, 0, 255)"
+        }, {
+          label: "iterates",
+          data: iterates,
+          cubicInterpolationMode: 'monotone',
+          yAxisID: 'y',
           borderColor: "rgba(0, 0, 255, 255)"
         }]
       },
       options: {
+        animation: false,
         responsive: true,
         maintainAspectRatio: false,
         scales: {
@@ -99,10 +98,6 @@ export class AppComponent {
             id: 'y',
             type: 'linear',
             position: 'left'
-          }, {
-            id: 'y2',
-            type: 'linear',
-            position: 'right'
           }]
         }
       }
