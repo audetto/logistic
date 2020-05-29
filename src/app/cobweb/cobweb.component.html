@@ -2,9 +2,15 @@
     <mat-grid-tile colspan="1">
         <form>
             <mat-form-field>
+                <mat-label>a value</mat-label>
+                <input name="a" type="number" step="0.1" [ngModel]="a" (ngModelChange)="onA($event)" matInput
+                    placeholder="2.2">
+            </mat-form-field>
+            <br>
+            <mat-form-field>
                 <mat-label>x value</mat-label>
                 <input name="x" type="number" step="0.1" [ngModel]="x" (ngModelChange)="onX($event)" matInput
-                    placeholder="12">
+                    placeholder="0.2">
             </mat-form-field>
             <br>
             <mat-form-field>

@@ -8,7 +8,7 @@ import * as math from 'mathjs'
 })
 export class FunctionComponent implements OnInit {
 
-  expression: string = 'sin(x)';
+  expression: string = 'a*sin(x)';
   node: math.MathNode;
   func: math.EvalFunction;
   messages: string;

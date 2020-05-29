@@ -24,6 +24,7 @@ export class CobwebComponent implements OnInit {
 
   chart: chart.Chart;
   x: number = 0.2;
+  a: number = 2.2;
   xMin: number = 0;
   xMax: number = 2;
   skip: number = 0;
@@ -32,8 +33,15 @@ export class CobwebComponent implements OnInit {
   }
 
   getF(): (x: number) => number {
-    let f = (x: number) => this.func.evaluate({ x: x });
+    let f = (x: number) => this.func.evaluate({ x: x, a: this.a });
     return f;
+  }
+
+  onA(a?: number): void {
+    if (a != null && this.a !== a) {
+      this.a = a;
+      this.draw();
+    }
   }
 
   onX(x?: number): void {
