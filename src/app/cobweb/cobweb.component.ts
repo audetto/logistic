@@ -15,15 +15,15 @@ export class CobwebComponent implements OnInit {
   private _func: math.EvalFunction;
   @Input() set func(func: math.EvalFunction) {
     this._func = func;
-    this.onDraw();
+    this.draw();
   }
 
   get func(): math.EvalFunction {
     return this._func;
   }
 
-  x: number = 0.2;
   chart: chart.Chart;
+  x: number = 0.2;
   xMin: number = 0;
   xMax: number = 2;
 
@@ -38,11 +38,25 @@ export class CobwebComponent implements OnInit {
   onX(x?: number): void {
     if (x != null && this.x !== x) {
       this.x = x;
-      this.onDraw();
+      this.draw();
     }
   }
 
-  onDraw(): void {
+  onMax(x?: number): void {
+    if (x != null && this.xMax !== x) {
+      this.xMax = x;
+      this.draw();
+    }
+  }
+
+  onMin(x?: number): void {
+    if (x != null && this.xMin !== x) {
+      this.xMin = x;
+      this.draw();
+    }
+  }
+
+  draw(): void {
     if (this.x != null && this.func != null) {
       let canvas = this.xy.nativeElement;
       let context: CanvasRenderingContext2D = canvas.getContext('2d');

@@ -9,12 +9,12 @@
             <br>
             <mat-form-field>
                 <mat-label>Upper bound</mat-label>
-                <input name="xMax" type="number" [ngModel]="xMax" (ngModelChange)="xMax=$event; onDraw()" matInput>
+                <input name="xMax" type="number" [ngModel]="xMax" (ngModelChange)="onMax($event)" matInput>
             </mat-form-field>
             <br>
             <mat-form-field>
                 <mat-label>Lower bound</mat-label>
-                <input name="xMin" type="number" [ngModel]="xMin" (ngModelChange)="xMin=$event; onDraw()" matInput>
+                <input name="xMin" type="number" [ngModel]="xMin" (ngModelChange)="onMin($event)" matInput>
             </mat-form-field>
             <br>
         </form>
