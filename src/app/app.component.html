@@ -2,11 +2,20 @@
 <button mat-raised-button color="primary" (click)="sidenav.toggle()">Edit</button>
 
 <mat-sidenav-container>
+
   <mat-sidenav #sidenav mode="side">
     <app-function (compile)="func=$event"></app-function>
   </mat-sidenav>
 
   <mat-sidenav-content>
-    <app-cobweb [func]="func"></app-cobweb>
+    <mat-tab-group mat-align-tabs="start" dynamicHeight>
+      <mat-tab label="Iterates">
+        <app-cobweb [func]="func"></app-cobweb>>
+      </mat-tab>
+      <mat-tab label="Bifurcation">
+        <app-bifurcation [func]="func"></app-bifurcation>
+      </mat-tab>
+    </mat-tab-group>
   </mat-sidenav-content>
+
 </mat-sidenav-container>

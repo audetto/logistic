@@ -12,14 +12,18 @@ import { MatSidenavModule } from '@angular/material/sidenav'
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatCardModule } from '@angular/material/card';
 import { MatGridListModule } from '@angular/material/grid-list';
+import { MatTabsModule } from '@angular/material/tabs';
+
 import { FunctionComponent } from './function/function.component';
 import { CobwebComponent } from './cobweb/cobweb.component';
+import { BifurcationComponent } from './bifurcation/bifurcation.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     FunctionComponent,
-    CobwebComponent
+    CobwebComponent,
+    BifurcationComponent,
   ],
   imports: [
     BrowserModule,
@@ -32,6 +36,7 @@ import { CobwebComponent } from './cobweb/cobweb.component';
     MatToolbarModule,
     MatCardModule,
     MatGridListModule,
+    MatTabsModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

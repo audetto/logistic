@@ -4,13 +4,13 @@ import * as chart from 'chart.js'
 import * as utils from './../utils/math.js';
 
 @Component({
-  selector: 'app-cobweb',
-  templateUrl: './cobweb.component.html',
-  styleUrls: ['./cobweb.component.css']
+  selector: 'app-bifurcation',
+  templateUrl: './bifurcation.component.html',
+  styleUrls: ['./bifurcation.component.css']
 })
-export class CobwebComponent implements OnInit {
+export class BifurcationComponent implements OnInit {
 
-  @ViewChild('xy') xy;
+  @ViewChild('xyz') xy;
 
   private _func: math.EvalFunction;
   @Input() set func(func: math.EvalFunction) {
@@ -26,10 +26,9 @@ export class CobwebComponent implements OnInit {
   context: CanvasRenderingContext2D;
 
   x: number = 0.2;
-  a: number = 2.2;
-  xMin: number = 0;
-  xMax: number = 2;
-  skip: number = 0;
+  aMin: number = 2;
+  aMax: number = 3;
+  skip: number = 100;
 
   ngOnInit(): void {
   }
@@ -39,16 +38,9 @@ export class CobwebComponent implements OnInit {
     this.context = canvas.getContext('2d');
   }
 
-  getF(): (x: number) => number {
-    let f = (x: number) => this.func.evaluate({ x: x, a: this.a });
+  getF(a: number): (x: number) => number {
+    let f = (x: number) => this.func.evaluate({ x: x, a: a });
     return f;
-  }
-
-  onA(a?: number): void {
-    if (a != null && this.a !== a) {
-      this.a = a;
-      this.draw();
-    }
   }
 
   onX(x?: number): void {
@@ -59,15 +51,15 @@ export class CobwebComponent implements OnInit {
   }
 
   onMax(x?: number): void {
-    if (x != null && this.xMax !== x) {
-      this.xMax = x;
+    if (x != null && this.aMax !== x) {
+      this.aMax = x;
       this.draw();
     }
   }
 
   onMin(x?: number): void {
-    if (x != null && this.xMin !== x) {
-      this.xMin = x;
+    if (x != null && this.aMin !== x) {
+      this.aMin = x;
       this.draw();
     }
   }
@@ -81,47 +73,38 @@ export class CobwebComponent implements OnInit {
 
   draw(): void {
     if (this.context && this.func) {
-      let f = this.getF();
-
-      let iterates = utils.iterateFunction(f, this.x, this.skip, 100);
-
-      const minReducer = (accumulator: number, currentValue) => Math.min(accumulator, currentValue.x);
-      const maxReducer = (accumulator: number, currentValue) => Math.max(accumulator, currentValue.x);
-      let lower = iterates.reduce(minReducer, this.xMin);
-      let upper = iterates.reduce(maxReducer, this.xMax);
+      let lower = this.aMin;
+      let upper = this.aMax;
 
       let dx = (upper - lower) / 100;
       const it = utils.makeRangeIterator(lower, upper + dx, dx);
 
-      let xs = Array.from(it);
-      let data = xs.map(x => ({ x: x, y: f(x) }));
-      let identity = xs.map(x => ({ x: x, y: x }));
+      let data = [];
+
+      for (const a of it) {
+        let f = this.getF(a);
+
+        let iterates = utils.iterateFunction(f, this.x, this.skip, 100);
+        for (const xy of iterates) {
+          data.push({ x: a, y: xy.x });
+        }
+      }
+
+      console.log(data);
 
       if (this.chart) {
         this.chart.destroy();
       }
 
       this.chart = new chart.Chart(this.context, {
-        type: 'line',
+        type: 'scatter',
         data: {
           datasets: [{
-            label: 'function',
+            label: 'bifurcation',
             data: data,
             yAxisID: 'y',
             borderColor: 'rgba(255, 0, 0, 255)',
-            pointRadius: 0
-          }, {
-            label: 'identity',
-            data: identity,
-            yAxisID: 'y',
-            borderColor: 'rgba(0, 255, 0, 255)',
-            pointRadius: 0
-          }, {
-            label: 'iterates',
-            data: iterates,
-            cubicInterpolationMode: 'monotone',
-            yAxisID: 'y',
-            borderColor: 'rgba(0, 0, 255, 255)'
+            pointRadius: 1
           }]
         },
         options: {
