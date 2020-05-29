@@ -77,7 +77,7 @@ export class BifurcationComponent implements OnInit {
       let lower = this.aMin;
       let upper = this.aMax;
 
-      let dx = (upper - lower) / 100;
+      let dx = (upper - lower) / 200;
       const it = utils.makeRangeIterator(lower, upper + dx, dx);
 
       let data = [];
@@ -85,9 +85,9 @@ export class BifurcationComponent implements OnInit {
       for (const a of it) {
         let f = this.getF(a);
 
-        let iterates = utils.iterateFunction(f, this.x, this.skip, 100);
-        for (const xy of iterates) {
-          data.push({ x: a, y: xy.x });
+        let points = utils.iterateFunction2(f, this.x, this.skip, 200, 0.00001);
+        for (const point of points) {
+          data.push({ x: a, y: point });
         }
       }
 

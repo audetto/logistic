@@ -84,12 +84,12 @@ export class CobwebComponent implements OnInit {
     if (this.context && this.func) {
       let f = this.getF();
 
-      let iterates = utils.iterateFunction(f, this.x, this.skip, 100);
+      let points = utils.iterateFunction(f, this.x, this.skip, 100);
 
-      const minReducer = (accumulator: number, currentValue) => Math.min(accumulator, currentValue.x);
-      const maxReducer = (accumulator: number, currentValue) => Math.max(accumulator, currentValue.x);
-      let lower = iterates.reduce(minReducer, this.xMin);
-      let upper = iterates.reduce(maxReducer, this.xMax);
+      const minReducer = (accumulator: number, currentValue) => Math.min(accumulator, currentValue);
+      const maxReducer = (accumulator: number, currentValue) => Math.max(accumulator, currentValue);
+      let lower = points.reduce(minReducer, this.xMin);
+      let upper = points.reduce(maxReducer, this.xMax);
 
       let dx = (upper - lower) / 100;
       const it = utils.makeRangeIterator(lower, upper + dx, dx);
@@ -97,6 +97,8 @@ export class CobwebComponent implements OnInit {
       let xs = Array.from(it);
       let data = xs.map(x => ({ x: x, y: f(x) }));
       let identity = xs.map(x => ({ x: x, y: x }));
+
+      let web = utils.createPath(points);
 
       if (this.chart) {
         this.chart.destroy();
@@ -119,7 +121,7 @@ export class CobwebComponent implements OnInit {
             pointRadius: 0
           }, {
             label: 'iterates',
-            data: iterates,
+            data: web,
             cubicInterpolationMode: 'monotone',
             yAxisID: 'y',
             borderColor: 'rgba(0, 0, 255, 255)'
