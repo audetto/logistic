@@ -26,6 +26,7 @@ export class CobwebComponent implements OnInit {
   x: number = 0.2;
   xMin: number = 0;
   xMax: number = 2;
+  skip: number = 0;
 
   ngOnInit(): void {
   }
@@ -56,6 +57,13 @@ export class CobwebComponent implements OnInit {
     }
   }
 
+  onSkip(x?: number): void {
+    if (x != null && this.skip !== x) {
+      this.skip = x;
+      this.draw();
+    }
+  }
+
   draw(): void {
     if (this.x != null && this.func != null) {
       let canvas = this.xy.nativeElement;
@@ -63,7 +71,7 @@ export class CobwebComponent implements OnInit {
 
       let f = this.getF();
 
-      let iterates = utils.iterateFunction(f, this.x, 100);
+      let iterates = utils.iterateFunction(f, this.x, this.skip, 100);
 
       const minReducer = (accumulator: number, currentValue) => Math.min(accumulator, currentValue.x);
       const maxReducer = (accumulator: number, currentValue) => Math.max(accumulator, currentValue.x);

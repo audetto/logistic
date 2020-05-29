@@ -17,6 +17,10 @@
                 <input name="xMin" type="number" [ngModel]="xMin" (ngModelChange)="onMin($event)" matInput>
             </mat-form-field>
             <br>
+            <mat-form-field>
+                <mat-label>Skip iteratons</mat-label>
+                <input name="skip" type="number" step="100" min="0" [ngModel]="skip" (ngModelChange)="onSkip($event)" matInput>
+            </mat-form-field>
         </form>
     </mat-grid-tile>
     <mat-grid-tile colspan="5">
