@@ -37,6 +37,7 @@ export class CobwebComponent implements OnInit {
   ngAfterViewInit(): void {
     let canvas = this.xy.nativeElement;
     this.context = canvas.getContext('2d');
+    this.draw();
   }
 
   getF(): (x: number) => number {

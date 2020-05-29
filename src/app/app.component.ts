@@ -15,4 +15,8 @@ export class AppComponent {
   ngOnInit(): void {
   }
 
+  onCompile(func: math.EvalFunction): void {
+    this.func = func;
+  }
+
 }

@@ -4,7 +4,7 @@
 <mat-sidenav-container>
 
   <mat-sidenav #sidenav mode="side">
-    <app-function (compile)="func=$event"></app-function>
+    <app-function (compile)="onCompile($event)"></app-function>
   </mat-sidenav>
 
   <mat-sidenav-content>

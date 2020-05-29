@@ -36,6 +36,7 @@ export class BifurcationComponent implements OnInit {
   ngAfterViewInit(): void {
     let canvas = this.xy.nativeElement;
     this.context = canvas.getContext('2d');
+    this.draw();
   }
 
   getF(a: number): (x: number) => number {
@@ -89,8 +90,6 @@ export class BifurcationComponent implements OnInit {
           data.push({ x: a, y: xy.x });
         }
       }
-
-      console.log(data);
 
       if (this.chart) {
         this.chart.destroy();
