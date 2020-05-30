@@ -3,6 +3,8 @@ import * as math from 'mathjs'
 import * as chart from 'chart.js'
 import * as utils from './../utils/math.js';
 
+type func_t = (a: number, x: number) => number;
+
 @Component({
   selector: 'app-bifurcation',
   templateUrl: './bifurcation.component.html',
@@ -12,13 +14,13 @@ export class BifurcationComponent implements OnInit {
 
   @ViewChild('xyz') xy;
 
-  private _func: math.EvalFunction;
-  @Input() set func(func: math.EvalFunction) {
+  private _func: func_t;
+  @Input() set func(func: func_t) {
     this._func = func;
     this.draw();
   }
 
-  get func(): math.EvalFunction {
+  get func(): func_t {
     return this._func;
   }
 
@@ -40,7 +42,7 @@ export class BifurcationComponent implements OnInit {
   }
 
   getF(a: number): (x: number) => number {
-    let f = (x: number) => this.func.evaluate({ x: x, a: a });
+    let f = (x: number) => this.func(a, x);
     return f;
   }
 

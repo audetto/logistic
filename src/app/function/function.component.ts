@@ -1,5 +1,7 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
-import * as math from 'mathjs'
+import { create, all, MathJsStatic } from 'mathjs/number';
+
+type func_t = (a: number, x: number) => number;
 
 @Component({
   selector: 'app-function',
@@ -12,17 +14,20 @@ export class FunctionComponent implements OnInit {
   node: math.MathNode;
   func: math.EvalFunction;
   messages: string;
+  maths: Partial<MathJsStatic>;
 
-  @Output() compile = new EventEmitter<math.EvalFunction>();
+  @Output() compile = new EventEmitter<func_t>();
 
-  constructor() { }
+  constructor() {
+    this.maths = create({ all }, {});
+  }
 
   ngOnInit(): void {
     this.parseString(this.expression);
   }
 
   parseString(expression: string): void {
-    let node = math.parse(expression);
+    let node = this.maths.parse(expression);
     this.messages = 'OK';
     this.compileNode(node);
   }
@@ -30,7 +35,19 @@ export class FunctionComponent implements OnInit {
   compileNode(node: math.MathNode): void {
     this.node = node;
     this.func = this.node.compile();
-    this.compile.emit(this.func);
+
+    const f = this.func;
+
+    function fax(a: number, x: number) {
+      const result = f.evaluate({ a: a, x: x });
+      if (Number.isFinite(result)) {
+        return result;
+      } else {
+        throw `Not a number: ${typeof result}`;
+      }
+    }
+
+    this.compile.emit(fax);
   }
 
   onExpression(expression: string): void {
@@ -45,8 +62,8 @@ export class FunctionComponent implements OnInit {
 
   onDifferentiate(): void {
     if (this.node) {
-      var derivative = math.derivative(this.node, 'x');
-      derivative = math.simplify(derivative);
+      var derivative = this.maths.derivative(this.node, 'x');
+      derivative = this.maths.simplify(derivative);
       this.expression = derivative.toString();
       this.compileNode(derivative);
     }
