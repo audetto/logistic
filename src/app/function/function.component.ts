@@ -10,11 +10,12 @@ type func_t = (a: number, x: number) => number;
 })
 export class FunctionComponent implements OnInit {
 
-  expression: string = 'a*sin(x)';
+  expression: string = 'a*x*(1-x)';
   node: math.MathNode;
   func: math.EvalFunction;
   messages: string;
   maths: Partial<MathJsStatic>;
+  order: number = 1;
 
   @Output() compile = new EventEmitter<func_t>();
 
@@ -35,11 +36,18 @@ export class FunctionComponent implements OnInit {
   compileNode(node: math.MathNode): void {
     this.node = node;
     this.func = this.node.compile();
+    this.publish();
+  }
 
+  publish(): void {
     const f = this.func;
+    const n = this.order;
 
     function fax(a: number, x: number) {
-      const result = f.evaluate({ a: a, x: x });
+      let result = x;
+      for (var i = 0; i < n; ++i) {
+        result = f.evaluate({ a: a, x: result });
+      }
       if (Number.isFinite(result)) {
         return result;
       } else {
@@ -60,13 +68,9 @@ export class FunctionComponent implements OnInit {
     }
   }
 
-  onDifferentiate(): void {
-    if (this.node) {
-      var derivative = this.maths.derivative(this.node, 'x');
-      derivative = this.maths.simplify(derivative);
-      this.expression = derivative.toString();
-      this.compileNode(derivative);
-    }
+  onOrder(order: number) : void {
+    this.order = order;
+    this.publish();
   }
 
 }

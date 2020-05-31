@@ -27,9 +27,9 @@ export class CobwebComponent implements OnInit {
   context: CanvasRenderingContext2D;
 
   x: number = 0.2;
-  a: number = 2.2;
+  a: number = 3.0;
   xMin: number = 0;
-  xMax: number = 2;
+  xMax: number = 1;
   skip: number = 0;
 
   ngOnInit(): void {
@@ -93,7 +93,7 @@ export class CobwebComponent implements OnInit {
       let upper = points.reduce(maxReducer, this.xMax);
 
       let dx = (upper - lower) / 100;
-      const it = utils.makeRangeIterator(lower, upper + dx, dx);
+      const it = utils.makeRangeIterator(lower, upper, dx);
 
       let xs = Array.from(it);
       let data = xs.map(x => ({ x: x, y: f(x) }));

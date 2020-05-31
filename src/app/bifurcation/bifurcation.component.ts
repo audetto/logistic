@@ -27,8 +27,8 @@ export class BifurcationComponent implements OnInit {
   context: CanvasRenderingContext2D;
 
   x: number = 0.2;
-  aMin: number = 2;
-  aMax: number = 3;
+  aMin: number = 2.9;
+  aMax: number = 4;
   skip: number = 100;
 
   ngOnInit(): void {
@@ -79,7 +79,7 @@ export class BifurcationComponent implements OnInit {
       let upper = this.aMax;
 
       let dx = (upper - lower) / 200;
-      const it = utils.makeRangeIterator(lower, upper + dx, dx);
+      const it = utils.makeRangeIterator(lower, upper, dx);
 
       let data = [];
 

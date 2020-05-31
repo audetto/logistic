@@ -13,6 +13,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatCardModule } from '@angular/material/card';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatTabsModule } from '@angular/material/tabs';
+import { MatSliderModule } from '@angular/material/slider';
 
 import { FunctionComponent } from './function/function.component';
 import { CobwebComponent } from './cobweb/cobweb.component';
@@ -37,6 +38,7 @@ import { BifurcationComponent } from './bifurcation/bifurcation.component';
     MatCardModule,
     MatGridListModule,
     MatTabsModule,
+    MatSliderModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
