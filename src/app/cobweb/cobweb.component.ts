@@ -1,5 +1,4 @@
 import { Component, OnInit, Input, ViewChild } from '@angular/core';
-import * as math from 'mathjs'
 import * as chart from 'chart.js'
 import * as utils from './../utils/math.js';
 
@@ -24,7 +23,7 @@ export class CobwebComponent implements OnInit {
     return this._func;
   }
 
-  chart: chart.Chart;
+  chart: chart;
   context: CanvasRenderingContext2D;
 
   x: number = 0.2;
@@ -130,7 +129,7 @@ export class CobwebComponent implements OnInit {
           }]
         },
         options: {
-          animation: false,
+          animation: null,
           responsive: true,
           maintainAspectRatio: false,
           scales: {
