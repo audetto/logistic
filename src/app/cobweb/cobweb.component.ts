@@ -87,8 +87,8 @@ export class CobwebComponent implements OnInit {
 
       let points = utils.iterateFunction(f, this.x, this.skip, 100);
 
-      const minReducer = (accumulator: number, currentValue) => Math.min(accumulator, currentValue);
-      const maxReducer = (accumulator: number, currentValue) => Math.max(accumulator, currentValue);
+      const minReducer = (accumulator: number, currentValue: number) => Math.min(accumulator, currentValue);
+      const maxReducer = (accumulator: number, currentValue: number) => Math.max(accumulator, currentValue);
       let lower = points.reduce(minReducer, this.xMin);
       let upper = points.reduce(maxReducer, this.xMax);
 
