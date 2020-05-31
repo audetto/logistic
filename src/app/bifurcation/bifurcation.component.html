@@ -1,27 +1,26 @@
 <mat-grid-list cols="6" rowHeight="600px">
     <mat-grid-tile colspan="1">
-        <form>
+        <section>
             <mat-form-field>
                 <mat-label>x value</mat-label>
-                <input name="x" type="number" step="0.1" [ngModel]="x" (ngModelChange)="onX($event)" matInput
-                    placeholder="0.2">
+                <input type="number" step="0.1" [ngModel]="x" (ngModelChange)="onX($event)" matInput placeholder="0.2">
             </mat-form-field>
             <br>
             <mat-form-field>
                 <mat-label>Upper bound</mat-label>
-                <input name="aMax" type="number" step="0.1" [ngModel]="aMax" (ngModelChange)="onMax($event)" matInput>
+                <input type="number" step="0.1" [ngModel]="aMax" (ngModelChange)="onMax($event)" matInput>
             </mat-form-field>
             <br>
             <mat-form-field>
                 <mat-label>Lower bound</mat-label>
-                <input name="aMin" type="number" step="0.1" [ngModel]="aMin" (ngModelChange)="onMin($event)" matInput>
+                <input type="number" step="0.1" [ngModel]="aMin" (ngModelChange)="onMin($event)" matInput>
             </mat-form-field>
             <br>
             <mat-form-field>
                 <mat-label>Skip iteratons</mat-label>
-                <input name="skip" type="number" step="100" min="0" [ngModel]="skip" (ngModelChange)="onSkip($event)" matInput>
+                <input type="number" step="100" min="0" [ngModel]="skip" (ngModelChange)="onSkip($event)" matInput>
             </mat-form-field>
-        </form>
+        </section>
     </mat-grid-tile>
     <mat-grid-tile colspan="5">
         <canvas #xyz></canvas>
