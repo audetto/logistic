@@ -50,11 +50,16 @@ export function iterateFunction2(f: (x: number) => number, x: number, skip: numb
 
 export function createPath(points: Array<number>): Array<object> {
     var x = points[0];
-    var result = [{x: x, y: 0}];
+    var result = [];
     for (const point of points) {
+        // skip first
         const y = point;
-        result.push({x: x, y: y});
-        result.push({x: y, y: y});
+        if (result.length == 0) {
+            result.push({x: x, y: 0});
+        } else {
+            result.push({x: x, y: y});
+            result.push({x: y, y: y});
+        }
         x = y;
     }
     return result;
