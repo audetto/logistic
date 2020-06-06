@@ -127,16 +127,16 @@ export class CobwebComponent implements OnInit {
         type: 'line',
         data: {
           datasets: [{
-            label: 'function',
-            data: data,
-            yAxisID: 'y',
-            borderColor: 'rgba(255, 0, 0, 255)',
-            pointRadius: 0
-          }, {
             label: 'identity',
             data: identity,
             yAxisID: 'y',
             borderColor: 'rgba(0, 255, 0, 255)',
+            pointRadius: 0
+          }, {
+            label: 'function',
+            data: data,
+            yAxisID: 'y',
+            borderColor: 'rgba(255, 0, 0, 255)',
             pointRadius: 0
           }, {
             label: 'iterates',
