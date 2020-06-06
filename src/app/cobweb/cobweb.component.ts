@@ -89,6 +89,16 @@ export class CobwebComponent implements OnInit {
     }
   }
 
+  onClick?(event?: MouseEvent, activeElements?: Array<{}>): any {
+    const chart = this.chart;
+    const relX = (event.offsetX - chart.chartArea.left) / (chart.chartArea.right - chart.chartArea.left);
+    // type information seems to be missing here
+    const axis = chart['scales'].x;
+
+    const x = axis.min + relX * (axis.max - axis.min);
+    this.onX(x);
+  }
+
   draw(): void {
     if (this.context && this.func) {
       let f = this.getF();
@@ -142,6 +152,7 @@ export class CobwebComponent implements OnInit {
           maintainAspectRatio: false,
           scales: {
             xAxes: [{
+              id: 'x',
               type: 'linear',
               position: 'bottom'
             }],
@@ -150,7 +161,8 @@ export class CobwebComponent implements OnInit {
               type: 'linear',
               position: 'left'
             }]
-          }
+          },
+          onClick: (event?: MouseEvent, activeElements?: Array<{}>) => this.onClick(event, activeElements)
         }
       });
       this.chart.resize();
