@@ -7,13 +7,13 @@
             </mat-form-field>
             <br>
             <mat-form-field>
-                <mat-label>Upper bound</mat-label>
-                <input type="number" step="0.1" [ngModel]="aMax" (ngModelChange)="onMax($event)" matInput>
+                <mat-label>Lower bound</mat-label>
+                <input type="number" step="0.1" [ngModel]="aMin" (ngModelChange)="onMin($event)" matInput>
             </mat-form-field>
             <br>
             <mat-form-field>
-                <mat-label>Lower bound</mat-label>
-                <input type="number" step="0.1" [ngModel]="aMin" (ngModelChange)="onMin($event)" matInput>
+                <mat-label>Upper bound</mat-label>
+                <input type="number" step="0.1" [ngModel]="aMax" (ngModelChange)="onMax($event)" matInput>
             </mat-form-field>
             <br>
             <mat-form-field>
