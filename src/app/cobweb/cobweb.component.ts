@@ -31,6 +31,7 @@ export class CobwebComponent implements OnInit {
   xMin: number = 0;
   xMax: number = 1;
   skip: number = 0;
+  iterations: number = 100;
 
   ngOnInit(): void {
   }
@@ -74,9 +75,16 @@ export class CobwebComponent implements OnInit {
     }
   }
 
-  onSkip(x?: number): void {
-    if (x != null && this.skip !== x) {
-      this.skip = x;
+  onSkip(skip?: number): void {
+    if (skip != null && this.skip !== skip) {
+      this.skip = skip;
+      this.draw();
+    }
+  }
+
+  onIterations(iterations?: number): void {
+    if (iterations != null && this.iterations !== iterations) {
+      this.iterations = iterations;
       this.draw();
     }
   }
@@ -85,7 +93,7 @@ export class CobwebComponent implements OnInit {
     if (this.context && this.func) {
       let f = this.getF();
 
-      let points = utils.iterateFunction(f, this.x, this.skip, 100);
+      let points = utils.iterateFunction(f, this.x, this.skip, this.iterations);
 
       const minReducer = (accumulator: number, currentValue: number) => Math.min(accumulator, currentValue);
       const maxReducer = (accumulator: number, currentValue: number) => Math.max(accumulator, currentValue);

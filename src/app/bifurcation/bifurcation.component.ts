@@ -30,6 +30,7 @@ export class BifurcationComponent implements OnInit {
   aMin: number = 2.9;
   aMax: number = 4;
   skip: number = 100;
+  iterations: number = 100;
 
   ngOnInit(): void {
   }
@@ -66,9 +67,16 @@ export class BifurcationComponent implements OnInit {
     }
   }
 
-  onSkip(x?: number): void {
-    if (x != null && this.skip !== x) {
-      this.skip = x;
+  onSkip(skip?: number): void {
+    if (skip != null && this.skip !== skip) {
+      this.skip = skip;
+      this.draw();
+    }
+  }
+
+  onIterations(iterations?: number): void {
+    if (iterations != null && this.iterations !== iterations) {
+      this.iterations = iterations;
       this.draw();
     }
   }
@@ -86,7 +94,7 @@ export class BifurcationComponent implements OnInit {
       for (const a of it) {
         let f = this.getF(a);
 
-        let points = utils.iterateFunction2(f, this.x, this.skip, 200, 0.00001);
+        let points = utils.iterateFunction2(f, this.x, this.skip, this.iterations, 0.00001);
         for (const point of points) {
           data.push({ x: a, y: point });
         }

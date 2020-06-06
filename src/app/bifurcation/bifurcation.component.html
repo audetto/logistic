@@ -20,6 +20,11 @@
                 <mat-label>Skip iteratons</mat-label>
                 <input type="number" step="100" min="0" [ngModel]="skip" (ngModelChange)="onSkip($event)" matInput>
             </mat-form-field>
+            <br>
+            <mat-form-field>
+                <mat-label>Display iteratons</mat-label>
+                <input type="number" step="10" min="0" [ngModel]="iterations" (ngModelChange)="onIterations($event)" matInput>
+            </mat-form-field>
         </section>
     </mat-grid-tile>
     <mat-grid-tile colspan="5">
