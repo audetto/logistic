@@ -12,7 +12,7 @@ export class AppComponent {
   name = 'Logistic App';
   link = 'http://www.odetti.it/andrea/products.htm';
 
-  func?: FunctionAX;
+  func!: FunctionAX;
 
   onCompile(func: FunctionAX): void {
     this.func = func;
