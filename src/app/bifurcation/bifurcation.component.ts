@@ -1,5 +1,5 @@
-import { Component, OnInit, Input, ViewChild } from '@angular/core';
-import { Chart } from 'chart.js/auto';
+import { Component, OnInit, OnDestroy, Input, ViewChild, ElementRef } from '@angular/core';
+import { Chart, ChartConfiguration } from 'chart.js/auto';
 import * as utils from '../utils/math';
 import { FunctionAX } from '../function/function.component'
 
@@ -8,9 +8,9 @@ import { FunctionAX } from '../function/function.component'
   templateUrl: './bifurcation.component.html',
   styleUrls: ['./bifurcation.component.css']
 })
-export class BifurcationComponent implements OnInit {
+export class BifurcationComponent implements OnInit, OnDestroy {
 
-  @ViewChild('xyz') xy: any;
+  @ViewChild('xyz') xy!: ElementRef;
 
   private _func!: FunctionAX;
   @Input() set func(f: FunctionAX) {
@@ -19,7 +19,7 @@ export class BifurcationComponent implements OnInit {
   }
 
   chart?: Chart;
-  context?: CanvasRenderingContext2D;
+  chartData!: ChartConfiguration;
 
   x: number = 0.2;
   aMin: number = 2.9;
@@ -28,12 +28,53 @@ export class BifurcationComponent implements OnInit {
   iterations: number = 100;
 
   ngOnInit(): void {
+    this.chartData = {
+      type: 'scatter',
+      data: {
+        datasets: [{
+          label: 'bifurcation',
+          data: [],
+          borderColor: 'rgba(255, 0, 0, 255)',
+          pointRadius: 1
+        }]
+      },
+      options: {
+        animation: false,
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          x: {
+            type: 'linear',
+            position: 'bottom',
+            title: {
+              display: true,
+              text: 'a'
+            }
+          },
+          y: {
+            type: 'linear',
+            position: 'left',
+            title: {
+              display: true,
+              text: 'fixed point'
+            }
+          }
+        }
+      }
+    };
   }
 
   ngAfterViewInit(): void {
     const canvas = this.xy.nativeElement;
-    this.context = canvas.getContext('2d');
+    const context = canvas.getContext('2d');
+
+    this.chart = new Chart(context, this.chartData);
     this.draw();
+  }
+
+  ngOnDestroy(): void {
+    this.chart?.destroy();
+    this.chart = undefined;
   }
 
   getF(a: number): (x: number) => number {
@@ -77,7 +118,7 @@ export class BifurcationComponent implements OnInit {
   }
 
   draw(): void {
-    if (this.context) {
+    if (this.chart) {
       const lower = this.aMin;
       const upper = this.aMax;
 
@@ -95,37 +136,8 @@ export class BifurcationComponent implements OnInit {
         }
       }
 
-      if (this.chart) {
-        this.chart.destroy();
-      }
-
-      this.chart = new Chart(this.context, {
-        type: 'scatter',
-        data: {
-          datasets: [{
-            label: 'bifurcation',
-            data: data,
-            borderColor: 'rgba(255, 0, 0, 255)',
-            pointRadius: 1
-          }]
-        },
-        options: {
-          animation: false,
-          responsive: true,
-          maintainAspectRatio: false,
-          scales: {
-            x: {
-              type: 'linear',
-              position: 'bottom'
-            },
-            y: {
-              type: 'linear',
-              position: 'left'
-            }
-          }
-        }
-      });
-      this.chart.resize();
+      this.chartData.data.datasets[0].data = data;
+      this.chart.update();
     }
   }
 

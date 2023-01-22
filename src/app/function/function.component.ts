@@ -44,7 +44,7 @@ export class FunctionComponent implements OnInit {
 
     function fax(a: number, x: number): number {
       let result = x;
-      for (var i = 0; i < n; ++i) {
+      for (let i = 0; i < n; ++i) {
         result = f.evaluate({ a: a, x: result });
       }
       if (Number.isFinite(result)) {
@@ -68,9 +68,12 @@ export class FunctionComponent implements OnInit {
   }
 
   onOrder(order: number) : void {
-    this.order = order;
-    if (this.func) {
-      this.publish(this.func);
+    console.log(order);
+    if (order != null && order !== this.order) {
+      this.order = order;
+      if (this.func) {
+        this.publish(this.func);
+      }
     }
   }
 

@@ -27,8 +27,9 @@ import { CobwebComponent } from './cobweb/cobweb.component';
     CobwebComponent
   ],
   imports: [
-    BrowserModule,
+    MatSliderModule,
     BrowserAnimationsModule,
+    BrowserModule,
 
     FormsModule,
 
@@ -38,7 +39,6 @@ import { CobwebComponent } from './cobweb/cobweb.component';
     MatGridListModule,
     MatInputModule,
     MatSidenavModule,
-    MatSliderModule,
     MatTabsModule,
     MatToolbarModule,
   ],

@@ -1,3 +1,5 @@
+import { Point } from 'chart.js/auto'
+
 export function* makeRangeIterator(start: number, end: number, step: number) {
   for (let i = start; i < end; i += step) {
       yield i;
@@ -48,7 +50,7 @@ export function iterateFunction2(f: (x: number) => number, x: number, skip: numb
   return points;
 }
 
-export function createPath(points: Array<number>): object[] {
+export function createPath(points: Array<number>): Point[] {
   let x = points[0];
   const result = [];
   for (const point of points) {

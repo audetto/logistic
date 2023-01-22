@@ -1,17 +1,16 @@
-import { Component, OnInit, Input, ViewChild } from '@angular/core';
-import { Chart, ActiveElement, ChartEvent } from 'chart.js/auto'
+import { Component, OnInit, OnDestroy, Input, ViewChild, ElementRef } from '@angular/core';
+import { Chart, ActiveElement, ChartEvent, ChartConfiguration } from 'chart.js/auto'
 import * as utils from '../utils/math';
 import { FunctionAX } from '../function/function.component'
-
 
 @Component({
   selector: 'app-cobweb',
   templateUrl: './cobweb.component.html',
   styleUrls: ['./cobweb.component.css']
 })
-export class CobwebComponent implements OnInit {
+export class CobwebComponent implements OnInit, OnDestroy {
 
-  @ViewChild('xy') xy : any;
+  @ViewChild('xy') xy!: ElementRef;
 
   private _func!: FunctionAX;
   @Input() set func(f: FunctionAX) {
@@ -20,7 +19,7 @@ export class CobwebComponent implements OnInit {
   }
 
   chart?: Chart;
-  context?: CanvasRenderingContext2D;
+  chartData!: ChartConfiguration;
 
   x: number = 0.2;
   a: number = 3.0;
@@ -30,12 +29,64 @@ export class CobwebComponent implements OnInit {
   iterations: number = 100;
 
   ngOnInit(): void {
+    this.chartData = {
+      type: 'line',
+      data: {
+        datasets: [{
+          label: 'identity',
+          data: [],
+          borderColor: 'rgba(0, 255, 0, 255)',
+          pointRadius: 0
+        }, {
+          label: 'function',
+          data: [],
+          borderColor: 'rgba(255, 0, 0, 255)',
+          pointRadius: 0
+        }, {
+          label: 'iterates',
+          data: [],
+          cubicInterpolationMode: 'monotone',
+          borderColor: 'rgba(0, 0, 255, 255)'
+        }]
+      },
+      options: {
+        animation: false,
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          x: {
+            type: 'linear',
+            position: 'bottom',
+            title: {
+              display: true,
+              text: 'x'
+            }
+          },
+          y: {
+            type: 'linear',
+            position: 'left',
+            title: {
+              display: true,
+              text: 'f(x)'
+            }
+          }
+        },
+        onClick: (event: ChartEvent, elements: ActiveElement[], chart: Chart) => this.onClick(event, elements, chart)
+      }
+    }
   }
 
   ngAfterViewInit(): void {
     const canvas = this.xy.nativeElement;
-    this.context = canvas.getContext('2d');
+    const context = canvas.getContext('2d');
+
+    this.chart = new Chart(context, this.chartData);
     this.draw();
+  }
+
+  ngOnDestroy(): void {
+    this.chart?.destroy();
+    this.chart = undefined;
   }
 
   getF(): (x: number) => number {
@@ -97,7 +148,7 @@ export class CobwebComponent implements OnInit {
   }
 
   draw(): void {
-    if (this.context) {
+    if (this.chart) {
       const f = this.getF();
 
       const points = utils.iterateFunction(f, this.x, this.skip, this.iterations);
@@ -116,48 +167,10 @@ export class CobwebComponent implements OnInit {
 
       const web = utils.createPath(points);
 
-      if (this.chart) {
-        this.chart.destroy();
-      }
-
-      this.chart = new Chart(this.context, {
-        type: 'line',
-        data: {
-          datasets: [{
-            label: 'identity',
-            data: identity,
-            borderColor: 'rgba(0, 255, 0, 255)',
-            pointRadius: 0
-          }, {
-            label: 'function',
-            data: data,
-            borderColor: 'rgba(255, 0, 0, 255)',
-            pointRadius: 0
-          }, {
-            label: 'iterates',
-            data: web,
-            cubicInterpolationMode: 'monotone',
-            borderColor: 'rgba(0, 0, 255, 255)'
-          }]
-        },
-        options: {
-          animation: false,
-          responsive: true,
-          maintainAspectRatio: false,
-          scales: {
-            x: {
-              type: 'linear',
-              position: 'bottom'
-            },
-            y: {
-              type: 'linear',
-              position: 'left'
-            }
-          },
-          onClick: (event: ChartEvent, elements: ActiveElement[], chart: Chart) => this.onClick(event, elements, chart)
-        }
-      });
-      this.chart.resize();
+      this.chartData.data.datasets[0].data = identity;
+      this.chartData.data.datasets[1].data = data;
+      this.chartData.data.datasets[2].data = web;
+      this.chart.update();
     }
   }
 
