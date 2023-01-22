@@ -11,6 +11,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatInputModule } from '@angular/material/input';
 import { MatSidenavModule } from '@angular/material/sidenav'
+import { MatSliderModule } from '@angular/material/slider';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatToolbarModule } from '@angular/material/toolbar';
 
@@ -37,6 +38,7 @@ import { CobwebComponent } from './cobweb/cobweb.component';
     MatGridListModule,
     MatInputModule,
     MatSidenavModule,
+    MatSliderModule,
     MatTabsModule,
     MatToolbarModule,
   ],
