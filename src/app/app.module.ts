@@ -16,12 +16,14 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 
 import { FunctionComponent } from './function/function.component';
 import { BifurcationComponent } from './bifurcation/bifurcation.component';
+import { CobwebComponent } from './cobweb/cobweb.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     FunctionComponent,
-    BifurcationComponent
+    BifurcationComponent,
+    CobwebComponent
   ],
   imports: [
     BrowserModule,

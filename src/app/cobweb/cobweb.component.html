@@ -1,0 +1,38 @@
+<mat-grid-list cols="6" rowHeight="600px">
+  <mat-grid-tile colspan="1">
+      <section>
+          <mat-form-field>
+              <mat-label>a value</mat-label>
+              <input type="number" step="0.1" [ngModel]="a" (ngModelChange)="onA($event)" matInput placeholder="2.2">
+          </mat-form-field>
+          <br>
+          <mat-form-field>
+              <mat-label>x value</mat-label>
+              <input type="number" step="0.1" [ngModel]="x" (ngModelChange)="onX($event)" matInput placeholder="0.2">
+          </mat-form-field>
+          <br>
+          <mat-form-field>
+              <mat-label>Lower bound</mat-label>
+              <input type="number" step="1" [ngModel]="xMin" (ngModelChange)="onMin($event)" matInput>
+          </mat-form-field>
+          <br>
+          <mat-form-field>
+              <mat-label>Upper bound</mat-label>
+              <input type="number" step="1" [ngModel]="xMax" (ngModelChange)="onMax($event)" matInput>
+          </mat-form-field>
+          <br>
+          <mat-form-field>
+              <mat-label>Skip iteratons</mat-label>
+              <input type="number" step="100" min="0" [ngModel]="skip" (ngModelChange)="onSkip($event)" matInput>
+          </mat-form-field>
+          <br>
+          <mat-form-field>
+              <mat-label>Display iteratons</mat-label>
+              <input type="number" step="10" min="0" [ngModel]="iterations" (ngModelChange)="onIterations($event)" matInput>
+          </mat-form-field>
+      </section>
+  </mat-grid-tile>
+  <mat-grid-tile colspan="5">
+      <canvas #xy></canvas>
+  </mat-grid-tile>
+</mat-grid-list>

@@ -19,7 +19,7 @@ export class BifurcationComponent implements OnInit {
   }
 
   chart?: Chart;
-  context!: CanvasRenderingContext2D;
+  context?: CanvasRenderingContext2D;
 
   x: number = 0.2;
   aMin: number = 2.9;
@@ -77,54 +77,56 @@ export class BifurcationComponent implements OnInit {
   }
 
   draw(): void {
-    const lower = this.aMin;
-    const upper = this.aMax;
+    if (this.context) {
+      const lower = this.aMin;
+      const upper = this.aMax;
 
-    const dx = (upper - lower) / 200;
-    const it = utils.makeRangeIterator(lower, upper, dx);
+      const dx = (upper - lower) / 200;
+      const it = utils.makeRangeIterator(lower, upper, dx);
 
-    const data = [];
+      const data = [];
 
-    for (const a of it) {
-      const f = this.getF(a);
+      for (const a of it) {
+        const f = this.getF(a);
 
-      const points = utils.iterateFunction2(f, this.x, this.skip, this.iterations, 0.00001);
-      for (const point of points) {
-        data.push({ x: a, y: point });
-      }
-    }
-
-    if (this.chart) {
-      this.chart.destroy();
-    }
-
-    this.chart = new Chart(this.context, {
-      type: 'scatter',
-      data: {
-        datasets: [{
-          label: 'bifurcation',
-          data: data,
-          borderColor: 'rgba(255, 0, 0, 255)',
-          pointRadius: 1
-        }]
-      },
-      options: {
-        animation: false,
-        responsive: true,
-        maintainAspectRatio: false,
-        scales: {
-          x: {
-            type: 'linear',
-            position: 'bottom'
-          },
-          y: {
-            type: 'linear',
-            position: 'left'
-          }
+        const points = utils.iterateFunction2(f, this.x, this.skip, this.iterations, 0.00001);
+        for (const point of points) {
+          data.push({ x: a, y: point });
         }
       }
-    });
-    this.chart.resize();
+
+      if (this.chart) {
+        this.chart.destroy();
+      }
+
+      this.chart = new Chart(this.context, {
+        type: 'scatter',
+        data: {
+          datasets: [{
+            label: 'bifurcation',
+            data: data,
+            borderColor: 'rgba(255, 0, 0, 255)',
+            pointRadius: 1
+          }]
+        },
+        options: {
+          animation: false,
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            x: {
+              type: 'linear',
+              position: 'bottom'
+            },
+            y: {
+              type: 'linear',
+              position: 'left'
+            }
+          }
+        }
+      });
+      this.chart.resize();
+    }
   }
 
 }
