@@ -89,6 +89,10 @@ export class CobwebComponent implements OnInit, OnDestroy {
     this.chart = undefined;
   }
 
+  isReady(): boolean {
+    return !!this.chart && !!this._func;
+  }
+
   getF(): (x: number) => number {
     const f = (x: number) => this._func(this.a, x);
     return f;
@@ -148,7 +152,7 @@ export class CobwebComponent implements OnInit, OnDestroy {
   }
 
   draw(): void {
-    if (this.chart) {
+    if (this.isReady()) {
       const f = this.getF();
 
       const points = utils.iterateFunction(f, this.x, this.skip, this.iterations);
@@ -170,7 +174,7 @@ export class CobwebComponent implements OnInit, OnDestroy {
       this.chartData.data.datasets[0].data = identity;
       this.chartData.data.datasets[1].data = data;
       this.chartData.data.datasets[2].data = web;
-      this.chart.update();
+      this.chart?.update();
     }
   }
 

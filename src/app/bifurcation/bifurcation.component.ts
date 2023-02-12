@@ -77,6 +77,10 @@ export class BifurcationComponent implements OnInit, OnDestroy {
     this.chart = undefined;
   }
 
+  isReady(): boolean {
+    return !!this.chart && !!this._func;
+  }
+
   getF(a: number): (x: number) => number {
     const f = (x: number) => this._func(a, x);
     return f;
@@ -118,7 +122,7 @@ export class BifurcationComponent implements OnInit, OnDestroy {
   }
 
   draw(): void {
-    if (this.chart) {
+    if (this.isReady()) {
       const lower = this.aMin;
       const upper = this.aMax;
 
@@ -137,7 +141,7 @@ export class BifurcationComponent implements OnInit, OnDestroy {
       }
 
       this.chartData.data.datasets[0].data = data;
-      this.chart.update();
+      this.chart?.update();
     }
   }
 
