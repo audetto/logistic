@@ -1,7 +1,6 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { TheFunction } from '../utils/func';
 import * as mathjs from 'mathjs';
-
-export type FunctionAX = (a: number, x: number) => number;
 
 @Component({
   selector: 'app-function',
@@ -12,11 +11,11 @@ export class FunctionComponent implements OnInit {
   expression: string = 'a*x*(1-x)';
   order: number = 1;
   messages: string = '';
-  maths: mathjs.MathJsStatic;
-  node?: mathjs.MathNode;
+  maths: mathjs.MathJsInstance;
   func?: mathjs.EvalFunction;
+  deriv?: mathjs.EvalFunction;
 
-  @Output() compile = new EventEmitter<FunctionAX>();
+  @Output() compile = new EventEmitter<TheFunction>();
 
   constructor() {
     this.maths = mathjs.create(mathjs.all, {});
@@ -33,15 +32,18 @@ export class FunctionComponent implements OnInit {
   }
 
   compileNode(node: mathjs.MathNode): void {
-    this.node = node;
     this.func = node.compile();
 
-    this.publish(this.func);
+    const dnode = this.maths.derivative(node, 'x');
+    this.deriv = dnode.compile();
+
+    this.publish(this.func, this.deriv);
   }
 
-  publish(f: mathjs.EvalFunction): void {
+  publish(f: mathjs.EvalFunction, d: mathjs.EvalFunction): void {
     const n = this.order;
 
+    // iterated function
     function fax(a: number, x: number): number {
       let result = x;
       for (let i = 0; i < n; ++i) {
@@ -54,7 +56,26 @@ export class FunctionComponent implements OnInit {
       }
     }
 
-    this.compile.emit(fax);
+    // derivative of the iterated function
+    //                          f'(x)
+    //               f'(f(x)) * f'(x)
+    // f'(f(f(x))) * f'(f(x)) * f'(x)
+    function dax(a: number, x: number): number {
+      let result = x;
+      let d_result = 1.0;
+      for (let i = 0; i < n; ++i) {
+        const der = d.evaluate({ a: a, x: result });
+        d_result *= der;
+        result = f.evaluate({ a: a, x: result });
+      }
+      if (Number.isFinite(d_result)) {
+        return d_result;
+      } else {
+        throw `Not a finite number: ${typeof d_result}`;
+      }
+    }
+
+    this.compile.emit({func: fax, deriv: dax});
   }
 
   onExpression(expression: string): void {
@@ -71,8 +92,8 @@ export class FunctionComponent implements OnInit {
     console.log(order);
     if (order != null && order !== this.order) {
       this.order = order;
-      if (this.func) {
-        this.publish(this.func);
+      if (this.func && this.deriv) {
+        this.publish(this.func, this.deriv);
       }
     }
   }

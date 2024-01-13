@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 
-import { FunctionAX } from './function/function.component'
+import { TheFunction } from './utils/func';
 
 @Component({
   selector: 'app-root',
@@ -12,9 +12,9 @@ export class AppComponent {
   name = 'Logistic App';
   link = 'http://www.odetti.it/andrea/products.htm';
 
-  func!: FunctionAX;
+  func!: TheFunction;
 
-  onCompile(func: FunctionAX): void {
+  onCompile(func: TheFunction): void {
     this.func = func;
   }
 

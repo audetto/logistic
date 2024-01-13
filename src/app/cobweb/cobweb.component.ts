@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy, Input, ViewChild, ElementRef } from '@angular/core';
 import { Chart, ActiveElement, ChartEvent, ChartConfiguration } from 'chart.js/auto'
 import * as utils from '../utils/math';
-import { FunctionAX } from '../function/function.component'
+import { TheFunction, FunctionAX } from '../utils/func';
 
 @Component({
   selector: 'app-cobweb',
@@ -12,8 +12,8 @@ export class CobwebComponent implements OnInit, OnDestroy {
 
   @ViewChild('xy') xy!: ElementRef;
 
-  private _func!: FunctionAX;
-  @Input() set func(f: FunctionAX) {
+  private _func!: TheFunction;
+  @Input() set func(f: TheFunction) {
     this._func = f;
     this.draw();
   }
@@ -27,6 +27,7 @@ export class CobwebComponent implements OnInit, OnDestroy {
   xMax: number = 1;
   skip: number = 0;
   iterations: number = 100;
+  lyapunov: number = 0;
 
   ngOnInit(): void {
     this.chartData = {
@@ -94,7 +95,12 @@ export class CobwebComponent implements OnInit, OnDestroy {
   }
 
   getF(): (x: number) => number {
-    const f = (x: number) => this._func(this.a, x);
+    const f = (x: number) => this._func.func(this.a, x);
+    return f;
+  }
+
+  getD(): (x: number) => number {
+    const f = (x: number) => this._func.deriv(this.a, x);
     return f;
   }
 
@@ -154,8 +160,11 @@ export class CobwebComponent implements OnInit, OnDestroy {
   draw(): void {
     if (this.isReady()) {
       const f = this.getF();
+      const d = this.getD();
 
       const points = utils.iterateFunction(f, this.x, this.skip, this.iterations);
+
+      this.lyapunov = utils.getLyapunov(d, points);
 
       const minReducer = (accumulator: number, currentValue: number) => Math.min(accumulator, currentValue);
       const maxReducer = (accumulator: number, currentValue: number) => Math.max(accumulator, currentValue);

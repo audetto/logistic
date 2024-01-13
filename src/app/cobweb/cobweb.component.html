@@ -30,6 +30,11 @@
         <mat-label>Display iteratons</mat-label>
         <input type="number" step="10" min="0" [ngModel]="iterations" (ngModelChange)="onIterations($event)" matInput>
       </mat-form-field>
+      <br>
+      <mat-form-field>
+        <mat-label>Lyapunov exponent</mat-label>
+        <input type="text" [ngModel]="lyapunov" matInput disabled>
+      </mat-form-field>
     </section>
   </mat-grid-tile>
   <mat-grid-tile colspan="5">

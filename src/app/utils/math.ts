@@ -22,7 +22,20 @@ export function iterateFunction(f: (x: number) => number, x: number, skip: numbe
   return result;
 }
 
-export function iterateFunction2(f: (x: number) => number, x: number, skip: number, n: number, dx: number) {
+export function getLyapunov(d: (x: number) => number, xs: number[]): number {
+    let lyapunov = 0.0;
+    
+    for (const x of xs) {
+        const val = d(x);
+        lyapunov += Math.log(Math.abs(val));
+    }
+
+    const res = lyapunov / xs.length;
+  
+    return res;
+}
+  
+export function iterateFunction2(f: (x: number) => number, x: number, skip: number, n: number, dx: number): number[] {
   let x0 = x;
   for (let i = 0; i < skip; ++i) {
       x0 = f(x0);
