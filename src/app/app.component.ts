@@ -17,14 +17,14 @@ import { MatToolbar } from '@angular/material/toolbar';
     imports: [MatToolbar, MatButton, MatSidenavContainer, MatSidenav, FunctionComponent, MatSidenavContent, MatTabGroup, MatTab, CobwebComponent, BifurcationComponent]
 })
 export class AppComponent {
-  andsoft = 'AndSoft Inc.';
-  name = 'Logistic App';
-  link = 'http://www.odetti.it/andrea/products.htm';
+    andsoft = 'AndSoft Inc.';
+    name = 'Logistic App';
+    link = 'http://www.odetti.it/andrea/products.htm';
 
-  func!: TheFunction;
+    func!: TheFunction;
 
-  onCompile(func: TheFunction): void {
-    this.func = func;
-  }
+    onCompile(func: TheFunction): void {
+        this.func = func;
+    }
 
 }
