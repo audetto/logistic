@@ -8,8 +8,8 @@ describe('CobwebComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ CobwebComponent ]
-    })
+    imports: [CobwebComponent]
+})
     .compileComponents();
 
     fixture = TestBed.createComponent(CobwebComponent);

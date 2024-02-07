@@ -8,8 +8,8 @@ describe('BifurcationComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ BifurcationComponent ]
-    })
+    imports: [BifurcationComponent]
+})
     .compileComponents();
 
     fixture = TestBed.createComponent(BifurcationComponent);

@@ -2,11 +2,17 @@ import { Component, OnInit, OnDestroy, Input, ViewChild, ElementRef } from '@ang
 import { Chart, ChartConfiguration } from 'chart.js/auto';
 import * as utils from '../utils/math';
 import { TheFunction, FunctionAX } from '../utils/func';
+import { MatInput } from '@angular/material/input';
+import { FormsModule } from '@angular/forms';
+import { MatFormField, MatLabel } from '@angular/material/form-field';
+import { MatGridList, MatGridTile } from '@angular/material/grid-list';
 
 @Component({
-  selector: 'app-bifurcation',
-  templateUrl: './bifurcation.component.html',
-  styleUrls: ['./bifurcation.component.css']
+    selector: 'app-bifurcation',
+    templateUrl: './bifurcation.component.html',
+    styleUrls: ['./bifurcation.component.css'],
+    standalone: true,
+    imports: [MatGridList, MatGridTile, MatFormField, MatLabel, FormsModule, MatInput]
 })
 export class BifurcationComponent implements OnInit, OnDestroy {
 

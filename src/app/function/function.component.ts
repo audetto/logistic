@@ -1,11 +1,18 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { TheFunction } from '../utils/func';
 import * as mathjs from 'mathjs';
+import { MatSlider, MatSliderThumb } from '@angular/material/slider';
+import { FormsModule } from '@angular/forms';
+import { MatInput } from '@angular/material/input';
+import { MatFormField, MatLabel } from '@angular/material/form-field';
+import { MatCard, MatCardHeader, MatCardTitle, MatCardSubtitle, MatCardContent } from '@angular/material/card';
 
 @Component({
-  selector: 'app-function',
-  templateUrl: './function.component.html',
-  styleUrls: ['./function.component.css']
+    selector: 'app-function',
+    templateUrl: './function.component.html',
+    styleUrls: ['./function.component.css'],
+    standalone: true,
+    imports: [MatCard, MatCardHeader, MatCardTitle, MatCardSubtitle, MatCardContent, MatFormField, MatLabel, MatInput, FormsModule, MatSlider, MatSliderThumb]
 })
 export class FunctionComponent implements OnInit {
   expression: string = 'a*x*(1-x)';

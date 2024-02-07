@@ -2,11 +2,17 @@ import { Component, OnInit, OnDestroy, Input, ViewChild, ElementRef } from '@ang
 import { Chart, ActiveElement, ChartEvent, ChartConfiguration } from 'chart.js/auto'
 import * as utils from '../utils/math';
 import { TheFunction, FunctionAX } from '../utils/func';
+import { MatInput } from '@angular/material/input';
+import { FormsModule } from '@angular/forms';
+import { MatFormField, MatLabel } from '@angular/material/form-field';
+import { MatGridList, MatGridTile } from '@angular/material/grid-list';
 
 @Component({
-  selector: 'app-cobweb',
-  templateUrl: './cobweb.component.html',
-  styleUrls: ['./cobweb.component.css']
+    selector: 'app-cobweb',
+    templateUrl: './cobweb.component.html',
+    styleUrls: ['./cobweb.component.css'],
+    standalone: true,
+    imports: [MatGridList, MatGridTile, MatFormField, MatLabel, FormsModule, MatInput]
 })
 export class CobwebComponent implements OnInit, OnDestroy {
 
